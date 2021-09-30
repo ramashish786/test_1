@@ -1,0 +1,34 @@
+db.test_agr.insertMany([
+{product:'brush' , totol:450, customer:'Roshan'},
+{product:'shampoa' , totol:250, customer:'Reema'},
+{product:'t-shirt' , totol:850, customer:'Roshan'},
+{product:'shoes' , totol:1250, customer:'Krishna'},
+{product:'tie' , totol:150, customer:'Kuldeep'},
+{product:'pen' , totol:50, customer:'Roshan'}
+]);
+
+db.test_agr.insertOne({product:'pen' , totol:50, customer:'Prem'});
+
+//find out how many pen were sold;
+
+db.test_agr.count({product:'pen'});
+
+//find list of all product sold;
+db.test_agr.distinct('product');
+
+
+//find the total amount of money spent by each customer 
+db.test_agr.aggregate(
+    [
+ { $match:{}},
+ {$group:{_id:"$customer", total:{$sum:"$totol"}}}
+    ]
+)
+
+ db.test_agr.aggregate(
+    [
+ { $match:{}},
+ {$group:{_id:"$customer", total:{$sum:"$totol"}}},
+ {$sort:{total:-1}}
+    ]
+)
