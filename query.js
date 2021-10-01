@@ -2,14 +2,36 @@
 //  Custom method for getElementById 
 
 //start
-var myGetElementById = (id) => {
-    id = '#' + id;
-    let tag = document.querySelector(id);
-    return tag;
-}
+let customGetElById = function(passedId){
+    var nodeFound = null;
+    recursive = function(nodes)
+    {
+        for(var i =0 ; i< nodes.length; i++)
+        {
+            if(nodes[i].nodeType == 1) 
+            {
+               
+                if(nodes[i].id == passedId)
+                {
+                    
+                    nodeFound = nodes[i];
+                    return;
+                }
+                if(nodes[i].childNodes)
+                {
+                    
+                    recursive(nodes[i].childNodes);
+                }
+            }
+        }
+    }
+    recursive(document.body.childNodes);
+    return nodeFound;
+};
+
 
 function callMe() {
-    let p_tag = myGetElementById('test_id');
+    let p_tag =customGetElById('test_id');
     p_tag.innerHTML = 'hello   there..'
 }
 
@@ -148,32 +170,56 @@ function primesInRange() {
     lowerNum = parseInt(lowerNum);
     higherNum = parseInt(higherNum);
 
-    let num;
+     let startD = new Date();
+    let start = startD.getMilliseconds();
 
-    for (num = lowerNum; num <= higherNum; num++) {
-        let d = new Date();
-        let start = d.getMilliseconds();
-        if (num === 1 || num === 0)
-            continue;
-        flag = 1;
-        for (j = 2; j <= num / 2; j++) {
-            if (num % j === 0) {
+    if (a <= 2) {
+       
+        a = 2;
+
+        if (b >= 2) {
+           let d = new Date();
+            let end = d.getMilliseconds();
+            let timeInSec = end - start;
+
+            arrPrimes.push(a);
+            allNumbers.push({ number: a, result: 'prime', timeInSec: timeInSec });
+            a++;
+
+        }
+
+    }
+
+
+    if (a % 2 == 0)
+
+        a++;
+
+    
+    for (i = a; i <= b; i = i + 2) {
+        let flag = 1;
+        for (j = 2; j * j <= i; ++j) {
+
+            if (i % j == 0) {
+
                 flag = 0;
+
                 break;
+
             }
+
         }
         d = new Date();
         let end = d.getMilliseconds();
-        console.log(start, end);
         let timeInSec = end - start;
-        if (flag == 1) {
-            allNumbers.push({ number: num, result: 'prime', timeInSec: timeInSec });
-        } else {
-            allNumbers.push({ number: num, result: 'normal', timeInSec: timeInSec });
+
+        if (flag == 1){
+            allNumbers.push({ number: i, result: 'prime', timeInSec: timeInSec });
+            arrPrimes.push(i);
+        }else{
+            allNumbers.push({ number: i, result: 'normal', timeInSec: timeInSec });
         }
-        if (flag === 1) {
-            arrPrimes.push(num);
-        }
+
     }
     showP.innerHTML = 'Following are the primes between\t' + lowerNum + '\tand\t' + higherNum;
     prime_numbers.classList.add('prime_numbers')
